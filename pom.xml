@@ -9,7 +9,7 @@
   
 	<groupId>nz.ac.auckland.search</groupId>
 	<artifactId>uoa-search-api</artifactId>
-	<version>1.1-SNAPSHOT</version>
+	<version>1.1</version>
 	<packaging>jar</packaging>
 	<name>uoa-search-api</name>
   
@@ -17,4 +17,8 @@
   		Common search interfaces
 	</description>
  
+
+  <scm>
+    <connection>scm:svn:https://subversion.auckland.ac.nz/svn/UoA.Artifacts/tags/nz.ac.auckland.search/uoa-search-api-1.1</connection>
+  </scm>
 </project>
