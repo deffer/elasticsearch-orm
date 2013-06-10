@@ -1,53 +1,58 @@
-class TestSubjectClass {
-    Long id = 8
-    String field1 = 'abc'
-    Set<Long> facs = [43, 11, 890] as Set<Long>
+package nz.ac.auckland.search;
 
-    @IndexedField(indexFieldName = 'rawText')
-    String markedUpString = '<br>Some text</br>'
+import java.util.*;
+
+class TestSubjectClass {
+    Long id = new Long(8);
+    String field1 = "abc";
+
+    Set<Long> facs = new HashSet(Arrays.asList(new Long(43), new Long(11), new Long(890)));
+
+    @IndexedField(indexFieldName = "fld")
+    private Long annotatedField = new Long(990);
+
+    @IndexedField(indexFieldName = "rawText")
+    private String markedUpString = "<br>Some text</br>";
 
     @IndexedField(indexFieldName = "convertedText", markupPresent =  true)
     String getMarkedUpString(){
-        return markedUpString
+        return markedUpString;
     }
 
-    @IndexedField(indexFieldName = 'fld')
-    Long annotatedField = 990
+    @IndexedField(indexFieldName = "id")
+    public Long getId(){return id;}
 
-    @IndexedField(indexFieldName = 'id')
-    public Long getId(){return id}
+    @IndexedField(indexFieldName = "faculties")
+    Set<Long> getFacs() {return facs;}
 
-    @IndexedField(indexFieldName = 'faculties')
-    Set<Long> getFacs() {return facs}
-
-    @IndexedField(indexFieldName = 'faculties')
+    @IndexedField(indexFieldName = "faculties")
     List<Long> addSomethingToFaculties(){
-        return [111, 222, 333] as List<Long>
+        return Arrays.asList(new Long(111), new Long(222), new Long(333));
     }
 
-    @IndexedField(indexFieldName = 'h')
+    @IndexedField(indexFieldName = "h")
     String getABC(){
-        return field1
+        return field1;
     }
 
-    @IndexedField(indexFieldName = 'h')
+    @IndexedField(indexFieldName = "h")
     String getBCD(){
-        return 'bcd'
+        return "bcd";
     }
 
-    @IndexedField(indexFieldName = 'h')
+    @IndexedField(indexFieldName = "h")
     String notGetter(){
-        return 'cdf'
+        return "cdf";
     }
 
-    @IndexedField(indexFieldName = 'excluded')
+    @IndexedField(indexFieldName = "excluded")
     private String privateMethod(){
-        return field1
+        return field1;
     }
 
-    @IndexedField(indexFieldName = 'excluded')
-    def methodWithArgs(int something){
-        return 888
+    @IndexedField(indexFieldName = "excluded")
+    Long methodWithArgs(int something){
+        return new Long(888);
     }
 
 }
