@@ -16,4 +16,11 @@
 	<description>
   		Common search interfaces
 	</description>
+    <dependencies>
+        <dependency>
+            <groupId>nz.ac.auckland.composite</groupId>
+            <artifactId>composite-logging-api</artifactId>
+            <version>[3,4)</version>
+        </dependency>
+    </dependencies>
 </project>
