@@ -5,11 +5,11 @@ import java.util.*;
 class TestSubjectClass {
     Long id = new Long(8);
     String field1 = "abc";
-
     Set<Long> facs = new HashSet(Arrays.asList(new Long(43), new Long(11), new Long(890)));
 
     @IndexedField(indexFieldName = "fld")
-    private Long annotatedField = new Long(990);
+    private Long annotatedField = new Long(990);  // private field without getter
+
 
     @IndexedField(indexFieldName = "rawText")
     private String markedUpString = "<br>Some text</br>";
@@ -17,6 +17,21 @@ class TestSubjectClass {
     @IndexedField(indexFieldName = "convertedText", markupPresent =  true)
     String getMarkedUpString(){
         return markedUpString;
+    }
+
+    @IndexedField(indexFieldName="defaultValue")
+    String defaultValueField = "."; // getter returns different value
+
+    private String getDefaultValueField(){
+        return "Lazy loaded value";
+    }
+
+    @IndexedField(indexFieldName="duplication")
+    String duplication = "duplication field";
+
+    @IndexedField(indexFieldName="duplication")
+    String getDuplication(){
+        return "duplication method";
     }
 
     @IndexedField(indexFieldName = "id")
@@ -45,7 +60,7 @@ class TestSubjectClass {
         return "cdf";
     }
 
-    @IndexedField(indexFieldName = "excluded")
+    @IndexedField(indexFieldName = "privateMethod")
     private String privateMethod(){
         return field1;
     }
