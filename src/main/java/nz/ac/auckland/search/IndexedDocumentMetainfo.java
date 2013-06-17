@@ -176,8 +176,19 @@ public class IndexedDocumentMetainfo {
         if (value!=null && annotation.markupPresent())
             value = getNakedText(value);
 
-        if (value!=null){
+        if (!emptyValue(value)){
             addField(annotation.indexFieldName(), value, into);
+        }
+    }
+
+    private boolean emptyValue(Object value){
+        if (value == null)
+            return true;
+
+        if (value instanceof String){
+            return ((String)value).trim().isEmpty();
+        }else{
+            return false;
         }
     }
 
