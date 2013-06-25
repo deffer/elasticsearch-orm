@@ -65,8 +65,7 @@ public class IndexedDocumentMetainfo {
             IndexedField annotation = method.getAnnotation(IndexedField.class);
             if (annotation != null){
                 if (Modifier.isPrivate(method.getModifiers())){
-                    method.setAccessible(true);
-                    log.warn("Accessing private methods "+clazz.getSimpleName()+"."+method.getName());
+                    log.warn("Accessing private method "+clazz.getSimpleName()+"."+method.getName());
                 }
                 if (method.getGenericParameterTypes().length>0) {
                     log.warn("Methods with arguments aren't supported: "+clazz.getSimpleName()+"."+method.getName());
@@ -109,7 +108,6 @@ public class IndexedDocumentMetainfo {
                 String name = field.getName();
                 String logName = clazz.getSimpleName()+"."+name;
                 if (Modifier.isPrivate(field.getModifiers())){
-                    field.setAccessible(true);
                     log.warn("Accessing private field of "+logName);
                 }
                 annotatedFields.put(field, annotation);
@@ -132,7 +130,6 @@ public class IndexedDocumentMetainfo {
                     try{
                         Method getter = clazz.getDeclaredMethod(getterName);
                         if (Modifier.isPrivate(getter.getModifiers())){
-                            getter.setAccessible(true);
                             log.warn("Accessing private getter of "+logName);
                         }
                         field2getterMap.put(field, getter);
@@ -144,14 +141,20 @@ public class IndexedDocumentMetainfo {
         }
     }
 
-
+    /**
+     * Main functionality. Converts annotated object into map of fields and its values.
+     *
+     * @param object object which methods and fields are annotated with IndexedField
+     *
+     * @return
+     */
     public Map<String, Object> convertObject(Object object){
 
         Map<String, Object> result = new HashMap<>();
         for (Method method : annotatedMethods.keySet()){
             IndexedField annotation = annotatedMethods.get(method);
             try {
-                Object value = method.invoke(object, null);
+                Object value = getMethodValue(method, object);
                 processValue(value, annotation, result);
             }catch(Throwable e){
                 log.error(e.getMessage(), e);
@@ -164,13 +167,39 @@ public class IndexedDocumentMetainfo {
                 Method getter = field2getterMap.get(field);
                 Object value;
                 if (getter!=null)
-                    value = getter.invoke(object, null);
+                    value = getMethodValue(getter, object);
                 else
-                    value = field.get(object);
+                    value = getFieldValue(field, object);
                 processValue(value, annotation, result);
             }catch(Throwable e){
                 log.error(e.getMessage(), e);
             }
+        }
+        return result;
+    }
+
+    private Object getMethodValue(Method method, Object obj) throws Throwable{
+        boolean before = method.isAccessible();
+        Object result;
+        if (Modifier.isPrivate(method.getModifiers())){
+            method.setAccessible(true);
+        }
+        result = method.invoke(obj, null);
+        if (method.isAccessible() != before){
+            method.setAccessible(before);
+        }
+        return result;
+    }
+
+    private Object getFieldValue(Field field, Object obj) throws Throwable{
+        boolean before = field.isAccessible();
+        Object result;
+        if (Modifier.isPrivate(field.getModifiers())){
+            field.setAccessible(true);
+        }
+        result = field.get(obj);
+        if (field.isAccessible() != before){
+            field.setAccessible(before);
         }
         return result;
     }
