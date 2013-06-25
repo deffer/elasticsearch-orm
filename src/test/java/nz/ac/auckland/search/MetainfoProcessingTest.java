@@ -50,7 +50,8 @@ public class MetainfoProcessingTest {
         assert result.get("faculties") instanceof List;
         List faculties = (List)result.get("faculties");
         assert faculties.size()==6;
-        assert faculties.containsAll(Arrays.asList(new Long(111), new Long(222), new Long(333), new Long(43), new Long(11), new Long(890)));
+
+        assert faculties.containsAll(Arrays.asList(111l, 222l, 333l, 43l, 11l, 890l));
 
         // text is converted
         assert result.get("convertedText").equals("Some text");

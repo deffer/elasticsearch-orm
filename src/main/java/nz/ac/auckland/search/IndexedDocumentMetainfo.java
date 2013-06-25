@@ -8,6 +8,9 @@ import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.*;
 
+/**
+ * A helper class that converts object annotated with IndexedFields to a map that represents single elastic document.
+ */
 public class IndexedDocumentMetainfo {
     public static Logger log = LoggerFactory.getLogger(IndexedDocumentMetainfo.class);
 
@@ -39,11 +42,11 @@ public class IndexedDocumentMetainfo {
      */
     MarkupConvertor markupConvertor = null;
 
-    public IndexedDocumentMetainfo(Class clazz){
+    public IndexedDocumentMetainfo(Class<?> clazz){
         this(clazz, null);
     }
 
-    public IndexedDocumentMetainfo(Class clazz, MarkupConvertor markupConvertor){
+    public IndexedDocumentMetainfo(Class<?> clazz, MarkupConvertor markupConvertor){
         this.markupConvertor = markupConvertor;
         cacheAnnotatedMethods(clazz);
         cacheAnnotatedFields(clazz);
@@ -56,7 +59,7 @@ public class IndexedDocumentMetainfo {
      *
      * @param clazz
      */
-    private void cacheAnnotatedMethods(Class clazz){
+    private void cacheAnnotatedMethods(Class<?> clazz){
 
         for (Method method : clazz.getDeclaredMethods()){
             IndexedField annotation = method.getAnnotation(IndexedField.class);
@@ -96,15 +99,15 @@ public class IndexedDocumentMetainfo {
      *
      * @param clazz
      */
-    private void cacheAnnotatedFields(Class clazz){
+    private void cacheAnnotatedFields(Class<?> clazz){
 
         // if sanityCheckCache already contains this name, make a warning
         //   that getter for this field is also annotated
         for (Field field : clazz.getDeclaredFields()){
             IndexedField annotation = field.getAnnotation(IndexedField.class);
-            if (annotation!=null){
+            if (annotation != null){
                 String name = field.getName();
-                String logName =clazz.getSimpleName()+"."+name;
+                String logName = clazz.getSimpleName()+"."+name;
                 if (Modifier.isPrivate(field.getModifiers())){
                     field.setAccessible(true);
                     log.warn("Accessing private field of "+logName);
@@ -207,7 +210,7 @@ public class IndexedDocumentMetainfo {
         if (into.containsKey(indexedFieldName)){
             // if not array, convert to array and add to it
             Object existing = into.get(indexedFieldName);
-            List list = null;
+            List list;
             if (!(existing instanceof List)){
                 list = new ArrayList();
                 list.add(existing);
@@ -226,14 +229,14 @@ public class IndexedDocumentMetainfo {
     }
 
     protected String getNakedText(Object value){
-        if (value==null) return null;
+        if (value == null) return null;
         if (markupConvertor == null){
-            log.error("Attempt to convert tex without markupConvertor specified");
+            log.error("Attempt to convert text without markupConvertor specified");
             return value.toString();
         }
         String str = markupConvertor.convertToText(value.toString());
         if (!str.trim().equals(".") && !str.trim().isEmpty()){
-            return str;
+            return str.trim();
         }else{
             return null;
         }
