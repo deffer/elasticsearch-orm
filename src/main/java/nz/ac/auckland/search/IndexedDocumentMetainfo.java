@@ -184,9 +184,12 @@ public class IndexedDocumentMetainfo {
         if (Modifier.isPrivate(method.getModifiers())){
             method.setAccessible(true);
         }
-        result = method.invoke(obj, null);
-        if (method.isAccessible() != before){
-            method.setAccessible(before);
+        try{
+            result = method.invoke(obj, null);
+        }finally {
+            if (method.isAccessible() != before){
+                method.setAccessible(before);
+            }
         }
         return result;
     }
