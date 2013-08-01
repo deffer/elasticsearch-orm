@@ -3,13 +3,13 @@
   
 	<parent>
 		<groupId>nz.ac.auckland</groupId>
-		<artifactId>uoa-java-parent</artifactId>
-		<version>2.4</version>
+		<artifactId>uoa-groovy-parent</artifactId>
+		<version>3.10</version>
 	</parent>
   
 	<groupId>nz.ac.auckland.search</groupId>
 	<artifactId>uoa-search-api</artifactId>
-	<version>1.4-SNAPSHOT</version>
+	<version>3.1-SNAPSHOT</version>
 	<packaging>jar</packaging>
 	<name>uoa-search-api</name>
   
