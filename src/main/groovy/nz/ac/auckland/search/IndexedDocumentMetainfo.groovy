@@ -149,10 +149,8 @@ public class IndexedDocumentMetainfo {
 	 * @return
 	 */
 	public Map<String, Object> convertObject(Object object){
-
-		Map<String, Object> result = new HashMap<>();
-		for (Method method : annotatedMethods.keySet()){
-			IndexedField annotation = annotatedMethods.get(method);
+		Map<String, ?> result = [:]
+		annotatedMethods.each{Method method, IndexedField annotation ->
 			try {
 				Object value = getMethodValue(method, object);
 				processValue(value, annotation, result);
@@ -207,7 +205,7 @@ public class IndexedDocumentMetainfo {
 		return result;
 	}
 
-	protected void processValue(Object value, IndexedField annotation, Map<String, Object> into){
+	protected void processValue(Object value, IndexedField annotation, Map<String, ?> into){
 		if (value!=null && annotation.markupPresent())
 			value = getNakedText(value);
 
@@ -227,34 +225,30 @@ public class IndexedDocumentMetainfo {
 		}
 	}
 
-	protected void addField(String indexedFieldName, Object fieldValue, Map<String, Object> into){
+	protected void addField(String indexedFieldName, Object fieldValue, Map<String, ?> into){
 		if (fieldValue == null) return;
-		Object value = fieldValue;
+		def value = fieldValue;
 
 		if (fieldValue instanceof Collection){
 			if (fieldValue instanceof Map){
 				log.error("Maps aren't supported. "+indexedFieldName+" will be ignored.");
 				return;
 			}
-			value = new ArrayList( (Collection)fieldValue );
+			value = fieldValue as List
 		}
 
 		if (into.containsKey(indexedFieldName)){
 			// if not array, convert to array and add to it
-			Object existing = into.get(indexedFieldName);
-			List list;
+			def existing = into.get(indexedFieldName);
 			if (!(existing instanceof List)){
-				list = new ArrayList();
-				list.add(existing);
-				into.put(indexedFieldName, list);
-			}else{
-				list = (List)existing ;
+				existing = [existing] as List
+				into.put(indexedFieldName, existing);
 			}
 
 			if (value instanceof Collection)
-				list.addAll((Collection) value);
+				existing.addAll((Collection) value);
 			else
-				list.add(value);
+				existing << value
 		}else{
 			into.put(indexedFieldName, value);
 		}
