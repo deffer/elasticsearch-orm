@@ -4,7 +4,7 @@
 	<parent>
 		<groupId>nz.ac.auckland</groupId>
 		<artifactId>uoa-groovy-parent</artifactId>
-		<version>3.10</version>
+		<version>3.12</version>
 	</parent>
   
 	<groupId>nz.ac.auckland.search</groupId>
