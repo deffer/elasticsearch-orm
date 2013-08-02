@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.Map;
 
 
-public class MetainfoProcessingTest {
+public class IndexedFieldTest {
     @Before
     public void setup() {
 

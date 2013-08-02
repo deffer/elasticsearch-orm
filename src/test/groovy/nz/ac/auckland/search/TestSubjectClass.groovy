@@ -2,6 +2,7 @@ package nz.ac.auckland.search;
 
 import java.util.*;
 
+@IndexedDocument(indexDocumentName="testSubject")
 class TestSubjectClass {
     Long id = new Long(8);
     String field1 = "abc";

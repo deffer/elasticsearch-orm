@@ -11,7 +11,7 @@ import java.lang.annotation.Target;
  * Private methods or methods with arguments are not supported.
  */
 @Retention(RetentionPolicy.RUNTIME)
-@Target({ElementType.METHOD, ElementType.FIELD})
+@Target([ElementType.METHOD, ElementType.FIELD])
 public @interface IndexedField {
 
     /**

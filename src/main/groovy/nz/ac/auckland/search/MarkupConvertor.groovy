@@ -1,4 +1,4 @@
-package nz.ac.auckland.search;
+package nz.ac.auckland.search
 
 /**
  * Instance of this should be injected into IndexedDocumentMetainfo during creation.

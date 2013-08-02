@@ -17,25 +17,25 @@ public class IndexedDocumentMetainfo {
 	/**
 	 * List of methods, annotated with @IndexedField
 	 */
-	Map<Method, IndexedField> annotatedMethods = new HashMap<>();
+	Map<Method, IndexedField> annotatedMethods = [:]
 
 	/**
 	 * List of fields, annotated with @IndexedField
 	 */
-	Map<Field, IndexedField> annotatedFields = new HashMap<>();
+	Map<Field, IndexedField> annotatedFields = [:]
 
 	/**
 	 * List of fields, which 'getters' are annotated. For example if getNote() is annotated,
 	 *   this map will have entry 'note' --> annotation.
 	 * Used to detect and warn about possible conflicts between annotations of field and its getter.
 	 */
-	Map<String, IndexedField> sanityCheckCache = new HashMap<>();
+	Map<String, IndexedField> sanityCheckCache = [:]
 
 	/**
 	 * Preferable way to access field is through its getter (to allow 'enhanced' beans to load their value on demand).
 	 * This is a cache of getters which fields are annotated
 	 */
-	Map<Field, Method> field2getterMap = new HashMap<>();
+	Map<Field, Method> field2getterMap = [:]
 
 	/**
 	 * Injected. Used to convert values that has markupPresent=true
@@ -65,20 +65,20 @@ public class IndexedDocumentMetainfo {
 			IndexedField annotation = method.getAnnotation(IndexedField.class);
 			if (annotation != null){
 				if (Modifier.isPrivate(method.getModifiers())){
-					log.warn("Accessing private method "+clazz.getSimpleName()+"."+method.getName());
+					log.warn("Accessing private method ${clazz.getSimpleName()}.${method.getName()}");
 				}
 				if (method.getGenericParameterTypes().length>0) {
-					log.warn("Methods with arguments aren't supported: "+clazz.getSimpleName()+"."+method.getName());
+					log.warn("Methods with arguments aren't supported: ${clazz.getSimpleName()}.${method.getName()}");
 				}else{
 					annotatedMethods.put(method, annotation);
 
 					String name = method.getName();
-					if (name.startsWith("get") && name.length()>3){
+					if (name.startsWith('get') && name.length()>3){
 						String fieldName = name.substring(3);
 						// lower case first char
 						fieldName = fieldName.substring(0,1).toLowerCase()+fieldName.substring(1);
 						if (sanityCheckCache.put(fieldName, annotation)!=null){
-							log.warn("Two getters for same field ?? "+method.getName());
+							log.warn("Two getters for same field ?? ${method.getName()}");
 						}
 					}
 				}
@@ -108,7 +108,7 @@ public class IndexedDocumentMetainfo {
 				String name = field.getName();
 				String logName = clazz.getSimpleName()+"."+name;
 				if (Modifier.isPrivate(field.getModifiers())){
-					log.warn("Accessing private field of "+logName);
+					log.warn("Accessing private field of $logName");
 				}
 				annotatedFields.put(field, annotation);
 
@@ -118,19 +118,19 @@ public class IndexedDocumentMetainfo {
 					//if (existing.indexFieldName()!=annotation.indexFieldName() // string literals in annotations don't seem to be 'interned'
 					if (!(existing.indexFieldName().equals(annotation.indexFieldName()))
 							|| existing.markupPresent()!=annotation.markupPresent()){
-						log.warn("Possible mistake. Both field "+name+" and its getter are annotated.");
+						log.warn("Possible mistake. Both field $name and its getter are annotated.");
 					}else {
 						// absolutely same annotations
-						log.warn("Annotation on field '"+logName+"' will be ignored. You only need one annotation (either field or getter).");
+						log.warn("Annotation on field $logName will be ignored. You only need one annotation (either field or getter).");
 						annotatedFields.remove(field);
 					}
 				}else{
 					// if there is non-annotated getter, pick it it to use instead of field
-					String getterName = "get"+name.substring(0,1).toUpperCase()+name.substring(1);
+					String getterName = 'get'+name.substring(0,1).toUpperCase()+name.substring(1);
 					try{
 						Method getter = clazz.getDeclaredMethod(getterName);
 						if (Modifier.isPrivate(getter.getModifiers())){
-							log.warn("Accessing private getter of "+logName);
+							log.warn("Accessing private getter of $logName");
 						}
 						field2getterMap.put(field, getter);
 					}catch (NoSuchMethodException e){
@@ -231,10 +231,11 @@ public class IndexedDocumentMetainfo {
 
 		if (fieldValue instanceof Collection){
 			if (fieldValue instanceof Map){
-				log.error("Maps aren't supported. "+indexedFieldName+" will be ignored.");
+				log.error("Maps are not supported. $indexedFieldName will be ignored.");
 				return;
 			}
-			value = fieldValue as List
+            // make a copy
+			value = new ArrayList(fieldValue)
 		}
 
 		if (into.containsKey(indexedFieldName)){
@@ -257,11 +258,11 @@ public class IndexedDocumentMetainfo {
 	protected String getNakedText(Object value){
 		if (value == null) return null;
 		if (markupConvertor == null){
-			log.error("Attempt to convert text without markupConvertor specified");
+			log.error('Attempt to convert text without markupConvertor specified');
 			return value.toString();
 		}
 		String str = markupConvertor.convertToText(value.toString());
-		if (!str.trim().equals(".") && !str.trim().isEmpty()){
+		if (!str.trim().isEmpty()){
 			return str.trim();
 		}else{
 			return null;
