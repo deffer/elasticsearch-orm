@@ -1,11 +1,9 @@
 package nz.ac.auckland.search
 
 /**
- * Created with IntelliJ IDEA.
- * User: deffer
- * Date: 2/08/13
- * Time: 9:53 AM
- * To change this template use File | Settings | File Templates.
+ * A key-value pair. Alternative to using properties=["key1=value1", "key2=value2"] syntax
+ *
+ * author: Irina Benediktovich - http://plus.google.com/+IrinaBenediktovich
  */
 public @interface VariableParameter {
     String name()

@@ -1,11 +1,9 @@
 package nz.ac.auckland.search.mapping
 
 /**
- * Created with IntelliJ IDEA.
- * User: deffer
- * Date: 2/08/13
- * Time: 2:29 PM
- * To change this template use File | Settings | File Templates.
+ * A property of MappingInfo.
+ *
+ * author: Irina Benediktovich - http://plus.google.com/+IrinaBenediktovich
  */
 public enum IndexInstruction {
     NO,             // not searchable

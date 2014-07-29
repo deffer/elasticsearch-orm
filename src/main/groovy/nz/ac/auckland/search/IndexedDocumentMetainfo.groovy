@@ -10,6 +10,8 @@ import java.util.*;
 
 /**
  * A helper class that converts object annotated with IndexedFields to a map that represents single elastic document.
+ *
+ * author: Irina Benediktovich - http://plus.google.com/+IrinaBenediktovich
  */
 public class IndexedDocumentMetainfo {
 	public static Logger log = LoggerFactory.getLogger(IndexedDocumentMetainfo.class);

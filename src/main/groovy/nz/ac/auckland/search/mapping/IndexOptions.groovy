@@ -1,7 +1,10 @@
 package nz.ac.auckland.search.mapping
 
-
-//Since 0.20.
+/**
+ * A property of MappingInfo.
+ * Since 0.20.
+ * author: Irina Benediktovich - http://plus.google.com/+IrinaBenediktovich
+ */
 public enum IndexOptions {
     DEFAULT,  //positions for analyzed fields, and to docs for not_analyzed fields
     DOCS, // only doc numbers

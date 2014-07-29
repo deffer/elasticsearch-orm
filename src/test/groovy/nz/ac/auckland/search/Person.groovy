@@ -1,21 +1,21 @@
 package nz.ac.auckland.search
 
-import nz.ac.auckland.search.analysis.AnalyzerInstance
-import nz.ac.auckland.search.analysis.FilterInstance;
+import nz.ac.auckland.search.analysis.Analyzer
+import nz.ac.auckland.search.analysis.Filter;
 
 import java.util.*;
 
 @IndexedDocument(indexDocumentName='person',
     analyzers = [
-        @AnalyzerInstance(name = 'snowball_english', type = 'snowball',
+        @Analyzer(name = 'snowball_english', type = 'snowball',
             params = [@VariableParameter(name = 'language', value = 'English')]),
-        @AnalyzerInstance(name = 'snowball_spanish', type = 'snowball',
+        @Analyzer(name = 'snowball_spanish', type = 'snowball',
             params = [@VariableParameter(name = 'language', value = 'Spanish')]),
-        @AnalyzerInstance(name = 'phonetic',
+        @Analyzer(name = 'phonetic',
             tokenizerName = 'whitespace',
             filterNames = ['trim', 'lowercase', 'asciifolding', 'stop', 'unique', 'custom_metaphone'])],
     filters = [
-        @FilterInstance(name = 'custom_metaphone', type = 'phonetic',
+        @Filter(name = 'custom_metaphone', type = 'phonetic',
             params = [
                 @VariableParameter(name = 'encoder', value = 'metaphone'),
                 @VariableParameter(name = 'replace', value = 'false')] )
