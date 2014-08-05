@@ -1,7 +1,8 @@
 This is initial version of the library that serializes objects into JSON using configuration supplied in object's class annotations.
 
-Supports both field and method annotations. If two fields are annotated with the same index field name, values are send as an array.
+Supports both field and method annotations. If two fields(methods) are annotated with the same index field name, values are send as an array.
 
+If field is annotated, but getter is present, getter will be used to retrieve field's value.
 To avoid ambiguity, annotating both field and its getter is not supported.
 
 Currently limited to 'flat' objects.
@@ -12,7 +13,7 @@ class Person {
     private Long id
    
     @IndexedField(indexFieldName = "names")
-    private String fisrtName
+    private String firstName
 
     @IndexedField(indexFieldName = "names")
     private String lastName
@@ -34,7 +35,7 @@ class Person {
 Support for:
 
 * Inner objects.
-* Default field names
+* Default field names.
 * Generation of elasticsearch mapping object from class annotations.
 
 
