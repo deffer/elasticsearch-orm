@@ -33,9 +33,10 @@ public @interface IndexedDocument {
 	 */
 	DynamicNature dynamic() default DynamicNature.TRUE
 
-	MappingInfo fieldAll() default @MappingInfo(enabled = true)
-	MappingInfo fieldSource() default @MappingInfo(enabled = true)
-	MappingInfo fieldTimestamp() default @MappingInfo(enabled = true)
+	// TODO a way provide mapping for those fields
+	//MappingInfo fieldAll() default @MappingInfo(enabled = true)
+	//MappingInfo fieldSource() default @MappingInfo(enabled = true)
+	//MappingInfo fieldTimestamp() default @MappingInfo(enabled = true)
 }
 
 
