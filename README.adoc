@@ -1,0 +1,40 @@
+This is initial version of the library that serializes objects into JSON using configuration supplied in object's class annotations.
+
+Supports both field and method annotations. If two fields are annotated with the same index field name, values are send as an array.
+
+To avoid ambiguity, annotating both field and its getter is not supported.
+
+Currently limited to 'flat' objects.
+
+[source,java]
+----
+class Person {
+    private Long id
+   
+    @IndexedField(indexFieldName = "names")
+    private String fisrtName
+
+    @IndexedField(indexFieldName = "names")
+    private String lastName
+
+    @IndexedField(indexFieldName = "addresses")
+    private List<String> addresses
+
+    private Department department
+
+    @IndexedField(indexFieldName = "department")
+    String getDepartmentShort(){
+        return department.getShortName()
+    }
+}
+----
+
+== In the next release...
+
+Support for:
+
+* Inner objects.
+* Default field names
+* Generation of elasticsearch mapping object from class annotations.
+
+
